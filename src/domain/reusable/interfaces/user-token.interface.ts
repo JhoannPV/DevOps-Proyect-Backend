@@ -6,3 +6,7 @@ export interface UserToken {
         email: string,
     }
 }
+
+export interface Token {
+    token: string,
+}

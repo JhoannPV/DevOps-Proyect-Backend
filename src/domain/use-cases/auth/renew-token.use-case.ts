@@ -1,9 +1,9 @@
-import { AuthRepository, CustomError, RegisterUserDto, SignToken, UserToken } from "../..";
+import { AuthRepository, CustomError, RegisterUserDto, SignToken, Token, UserToken } from "../..";
 import { JwtAdapter } from "../../../config";
 import { RenewTokenUserDto } from '../../dtos/auth/renew-token-user.dto';
 
 interface RenewUseCase {
-    execute(renewTokenUserDto: RenewTokenUserDto): Promise<UserToken>,
+    execute(renewTokenUserDto: RenewTokenUserDto): Promise<Token>;
 }
 
 export class RenewToken implements RenewUseCase {
@@ -12,7 +12,7 @@ export class RenewToken implements RenewUseCase {
         private readonly signToken: SignToken = JwtAdapter.generateToken,
     ) { }
 
-    async execute(renewTokenUserDto: RenewTokenUserDto): Promise<UserToken> {
+    async execute(renewTokenUserDto: RenewTokenUserDto): Promise<Token> {
         //Verificar que el refresh token sea valido
         const user = await this.authRepository.renewToken(renewTokenUserDto);
 
@@ -23,11 +23,6 @@ export class RenewToken implements RenewUseCase {
 
         return {
             token: token,
-            user: {
-                id: user.id,
-                name: user.name,
-                email: user.email,
-            }
         }
     }
 
