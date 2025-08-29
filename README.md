@@ -1,0 +1,2 @@
+# BACKEND MERN - CALENDAR
+Este es el repositorio del backend de una aplicación de calendario desarrollada con la pila MERN (MongoDB, Express, React, Node.js). Esta aplicación permite a los usuarios gestionar eventos y citas de manera eficiente.
