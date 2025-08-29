@@ -1,4 +1,5 @@
 import { AuthDatasource, AuthRepository, RegisterUserDto, UserEntity, LoginUserDto } from "../../domain";
+import { RenewTokenUserDto } from '../../domain/dtos/auth/renew-token-user.dto';
 
 export class AuthRepositoryImpl implements AuthRepository {
     constructor(
@@ -11,6 +12,9 @@ export class AuthRepositoryImpl implements AuthRepository {
 
     login(loginUserDto: LoginUserDto): Promise<UserEntity> {
         return this.authDatasource.login(loginUserDto);
+    }
+    renewToken(renewTokenUserDto: RenewTokenUserDto): Promise<UserEntity> {
+        return this.authDatasource.renewToken(renewTokenUserDto);
     }
 
 }

@@ -14,7 +14,7 @@ export class LoginUser implements LoginUserUseCase {
     async execute(loginUserDto: LoginUserDto): Promise<UserToken> {
         const user = await this.authRepository.login(loginUserDto);
 
-        const expiredToken = 60 * 60 * 2; // 2 horas
+        const expiredToken: number = 60 * 60 * 2; // 2 horas
         const token = await this.signToken({ id: user.id }, expiredToken);
 
         if (!token) {

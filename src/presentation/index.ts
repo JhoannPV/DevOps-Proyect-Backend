@@ -1,3 +1,3 @@
-export * from './middlewares/auth.middleware';
-export * from './middlewares/validatorFields.middleware';
-export * from './middlewares/resErrors.middleware';
+export * from './middlewares/auth/auth.middleware';
+export * from './middlewares/auth/validatorFields.middleware';
+export * from './middlewares/auth/resErrors.middleware';

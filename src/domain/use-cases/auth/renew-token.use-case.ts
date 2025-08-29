@@ -1,19 +1,20 @@
 import { AuthRepository, CustomError, RegisterUserDto, SignToken, UserToken } from "../..";
 import { JwtAdapter } from "../../../config";
+import { RenewTokenUserDto } from '../../dtos/auth/renew-token-user.dto';
 
-interface RegisterUserUseCase {
-    execute(registerUserDto: RegisterUserDto): Promise<UserToken>,
+interface RenewUseCase {
+    execute(renewTokenUserDto: RenewTokenUserDto): Promise<UserToken>,
 }
 
-export class RegisterUser implements RegisterUserUseCase {
+export class RenewToken implements RenewUseCase {
     constructor(
         private readonly authRepository: AuthRepository,
         private readonly signToken: SignToken = JwtAdapter.generateToken,
     ) { }
 
-    async execute(registerUserDto: RegisterUserDto): Promise<UserToken> {
-        //Crear el usuario
-        const user = await this.authRepository.register(registerUserDto);
+    async execute(renewTokenUserDto: RenewTokenUserDto): Promise<UserToken> {
+        //Verificar que el refresh token sea valido
+        const user = await this.authRepository.renewToken(renewTokenUserDto);
 
         //Token
         const expiredToken: number = 60 * 60 * 2; // 2 horas

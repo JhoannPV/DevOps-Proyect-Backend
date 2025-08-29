@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { AuthRepository, CustomError, LoginUser, LoginUserDto, RegisterUser, RegisterUserDto } from '../../domain';
+import { AuthRepository, CustomError, LoginUser, LoginUserDto, RegisterUser, RegisterUserDto, RenewToken } from '../../domain';
 import { UserModel } from '../../data/mongodb';
 
 export class AuthController {
@@ -20,8 +20,6 @@ export class AuthController {
     registerUser = (req: Request, res: Response) => {
         const registerUserDto = RegisterUserDto.create(req.body);
 
-        res.status(201).json({ body: registerUserDto });
-
         new RegisterUser(this.authRepository).execute(registerUserDto!)
             .then(data => res.status(201).json(data))
             .catch(error => this.handleError(error, res));
@@ -36,6 +34,9 @@ export class AuthController {
     }
 
     renewUser = (req: Request, res: Response) => {
-        res.json({ ok: true, msg: 'renew' });
+        const renewTokenUserDto = req.body;
+        const userDto = new RenewToken(this.authRepository).execute(renewTokenUserDto!)
+            .then(data => res.status(201).json(data))
+            .catch(error => this.handleError(error, res));
     }
 }

@@ -10,11 +10,7 @@ export class Server {
     public readonly app = express();
     private readonly port: number;
     private readonly routes: Router;
-    private readonly corsOptions = cors({
-        origin: '*', // Permitir todas las solicitudes CORS
-        methods: ['GET', 'POST', 'PUT', 'DELETE'], // Métodos permitidos
-        allowedHeaders: ['Content-Type', 'Authorization'], // Encabezados permitidos
-    });
+    private readonly corsOptions = cors();
 
     constructor(options: Options) {
         const { port = 3100, routes } = options;

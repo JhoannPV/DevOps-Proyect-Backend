@@ -22,10 +22,7 @@ export class AuthRoutes {
                 ResErrorsMiddleware.resErrors
             ], controller.registerUser);
 
-        router.get('/renew', controller.renewUser);
-
-        //router.get('/', [AuthMiddleware.validateJWT], controller.getUsers);
-
+        router.get('/renew-token', [AuthMiddleware.validateJWT], controller.renewUser);
 
         return router;
     }

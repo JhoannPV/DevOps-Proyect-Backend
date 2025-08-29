@@ -1,7 +1,7 @@
 import { UserMapper } from "..";
 import { BcryptAdapter } from "../../config";
 import { UserModel } from "../../data/mongodb";
-import { AuthDatasource, CustomError, LoginUserDto, RegisterUserDto, UserEntity } from "../../domain";
+import { AuthDatasource, CustomError, LoginUserDto, RegisterUserDto, RenewTokenUserDto, UserEntity } from "../../domain";
 
 type HashFunction = (password: string) => string;
 type CompareFunction = (password: string, hashed: string) => boolean;
@@ -57,4 +57,19 @@ export class AuthDatasourceImpl implements AuthDatasource {
         }
     }
 
+    async renewToken(renewTokenUserDto: RenewTokenUserDto): Promise<UserEntity> {
+        const { id } = renewTokenUserDto;
+
+        try {
+            const user = await UserModel.findById(id);
+            if (!user) throw CustomError.badRequest('User does not exist');
+            return UserMapper.userEntityFromObject(user);
+
+        } catch (error) {
+            if (error instanceof CustomError) {
+                throw error;
+            }
+            throw CustomError.internalServer();
+        }
+    }
 }

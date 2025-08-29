@@ -14,14 +14,6 @@ const userSchema = new Schema({
         type: String,
         required: [true, 'Name es required'],
     },
-    img: {
-        type: String,
-    },
-    roles: {
-        type: [String],
-        default: ['USER_ROLE'],
-        enum: ['USER_ROLE', 'ADMIN_ROLE']
-    },
 });
 
 export const UserModel = mongoose.model('User', userSchema);
