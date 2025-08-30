@@ -8,7 +8,7 @@ export class EventsDatasourceImpl implements EventsDatasource {
 
     async getEvents(): Promise<EventsEntity[]> {
         try {
-            const events = await EventModel.find();
+            const events = await EventModel.find().populate('user', 'name');
             if (!events) throw CustomError.notFound('No events found');
 
             const mappedEvents: EventsEntity[] = events.map(event => EventsMapper.EventEntityFromObject(event));
