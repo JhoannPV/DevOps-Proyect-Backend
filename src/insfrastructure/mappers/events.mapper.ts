@@ -3,7 +3,8 @@ import { CustomError, EventsEntity } from "../../domain";
 
 export class EventsMapper {
     static EventEntityFromObject(object: { [key: string]: any }) {
-        const { id, _id, title, start, end, bgColor, user } = object;
+        const { id, _id, title, start, end, bgColor } = object;
+        let { user } = object;
         let { notes } = object;
 
 
@@ -16,6 +17,11 @@ export class EventsMapper {
         if (!end) throw CustomError.badRequest('Missing end');
         if (!bgColor) throw CustomError.badRequest('Missing bgColor');
         if (!user) throw CustomError.badRequest('Missing user');
+
+        user = {
+            _id: user._id,
+            name: user.name
+        };
 
         return new EventsEntity(
             _id || id,
