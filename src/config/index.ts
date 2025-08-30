@@ -1,4 +1,4 @@
 export * from './envs';
-export * from './validators';
+export * from './isDate';
 export * from './jwt';
 export * from './bcrypt';

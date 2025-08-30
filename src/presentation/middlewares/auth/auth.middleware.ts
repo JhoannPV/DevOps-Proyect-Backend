@@ -33,7 +33,7 @@ export class AuthMiddleware {
                 return;
             }
 
-            req.body.user = user;
+            if (req.body) req.body.user = user;
 
             next();
         } catch (error) {

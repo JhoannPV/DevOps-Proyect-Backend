@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import { check } from "express-validator";
+import { isDate } from "../../../config";
 
 
 
@@ -25,4 +26,14 @@ export class ValidatorFieldsMiddleware {
         next();
     }
 
+    static validateFieldsCreateUpdateEvent = async (req: Request, res: Response, next: NextFunction) => {
+        await Promise.all([
+            check('title', 'Title is required').not().isEmpty().run(req),
+            check('start', 'Start date is required').custom(isDate).run(req),
+            check('end', 'End date is required').custom(isDate).run(req),
+            check('bgColor', 'Background color is required').not().isEmpty().run(req),
+
+        ]);
+        next();
+    }
 }
