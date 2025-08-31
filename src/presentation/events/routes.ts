@@ -29,6 +29,11 @@ export class EventsRoutes {
                 ResErrorsMiddleware.resErrors,
             ], controller.updateEvent);
 
+        router.delete('/delete-event/:id',
+            [
+                AuthMiddleware.validateJWT,
+            ], controller.deleteEvent);
+
         return router;
     }
 }

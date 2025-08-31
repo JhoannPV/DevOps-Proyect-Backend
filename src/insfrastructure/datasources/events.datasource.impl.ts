@@ -72,4 +72,30 @@ export class EventsDatasourceImpl implements EventsDatasource {
             throw CustomError.internalServer();
         }
     }
+
+    async deleteEvent(event: Request): Promise<EventsEntity> {
+        const eventId = event.params.id;
+        try {
+            const existingEvent = await EventModel
+                .findById(eventId);
+
+            if (!existingEvent) throw CustomError.notFound('Event not found');
+
+            console.log(event.body);
+
+            if (existingEvent.user.toString() !== event.body.user.id) {
+                throw CustomError.unauthorized('You do not have permission to delete this event');
+            }
+
+            const deletedEvent = await EventModel.findByIdAndDelete(eventId);
+            if (!deletedEvent) throw CustomError.notFound('Event not found after delete');
+
+            return EventsMapper.EventEntityFromObject(deletedEvent);
+        } catch (error) {
+            if (error instanceof CustomError) {
+                throw error;
+            }
+            throw CustomError.internalServer();
+        }
+    }
 }

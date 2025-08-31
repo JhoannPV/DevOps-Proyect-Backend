@@ -9,4 +9,6 @@ export abstract class EventsRepository {
 
     abstract updateEvent(event: Request): Promise<EventsEntity>;
 
+    abstract deleteEvent(event: Request): Promise<EventsEntity>;
+
 }

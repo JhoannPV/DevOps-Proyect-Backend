@@ -17,4 +17,8 @@ export class EventsRepositoryImpl implements EventsRepository {
     updateEvent(event: Request): Promise<EventsEntity> {
         return this.eventDatasource.updateEvent(event);
     }
+
+    deleteEvent(event: Request): Promise<EventsEntity> {
+        return this.eventDatasource.deleteEvent(event);
+    }
 }

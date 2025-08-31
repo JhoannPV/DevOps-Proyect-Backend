@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { CreateEvent, CustomError, GetEvents, UpdateEvent } from '../../domain';
+import { CreateEvent, CustomError, DeleteEvent, GetEvents, UpdateEvent } from '../../domain';
 import { EventsRepository } from '../../domain/repositories/events.repository';
 
 export class EventsController {
@@ -32,6 +32,12 @@ export class EventsController {
 
     updateEvent = (req: Request, res: Response) => {
         new UpdateEvent(this.eventsRepository).updateEvent(req)
+            .then((event) => res.status(200).json({ event }))
+            .catch((error) => this.handleError(error, res));
+    }
+
+    deleteEvent = (req: Request, res: Response) => {
+        new DeleteEvent(this.eventsRepository).deleteEvent(req)
             .then((event) => res.status(200).json({ event }))
             .catch((error) => this.handleError(error, res));
     }

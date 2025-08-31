@@ -1,8 +1,8 @@
 import { EventsEntity, EventsRepository } from "../..";
-import { Request, Response } from 'express';
+import { Request } from 'express';
 
 interface CreateEventUseCase {
-    createEvent(event: EventsEntity, req: Request): Promise<EventsEntity>;
+    createEvent(event: EventsEntity): Promise<EventsEntity>;
 }
 
 export class CreateEvent implements CreateEventUseCase {

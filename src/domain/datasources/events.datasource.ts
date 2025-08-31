@@ -11,4 +11,6 @@ export abstract class EventsDatasource {
 
     abstract updateEvent(event: Request): Promise<EventsEntity>;
 
+    abstract deleteEvent(event: Request): Promise<EventsEntity>;
+
 }

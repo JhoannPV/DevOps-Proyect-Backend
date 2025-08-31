@@ -14,5 +14,7 @@ export * from './use-cases/auth/renew-token.use-case';
 export * from './use-cases/events/get-events.use-case';
 export * from './use-cases/events/create-event.use-case';
 export * from './use-cases/events/update-event.use-case';
+export * from './use-cases/events/delete-event.use-case';
 export * from './reusable/interfaces/user-token.interface';
+export * from './reusable/interfaces/events.interface';
 export * from './reusable/types/sign-token.type';
