@@ -22,7 +22,7 @@ export class EventsRoutes {
                 ResErrorsMiddleware.resErrors,
             ], controller.createEvent);
 
-        router.put('/update-event:id',
+        router.put('/update-event/:id',
             [
                 AuthMiddleware.validateJWT,
                 ValidatorFieldsMiddleware.validateFieldsCreateUpdateEvent,

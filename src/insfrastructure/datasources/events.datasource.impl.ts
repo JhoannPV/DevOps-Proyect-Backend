@@ -1,6 +1,7 @@
 import { EventsMapper } from "..";
 import { EventModel } from "../../data/mongodb";
 import { CustomError, EventsEntity, EventsDatasource } from "../../domain";
+import { Request } from "express";
 
 export class EventsDatasourceImpl implements EventsDatasource {
     constructor(
@@ -16,6 +17,8 @@ export class EventsDatasourceImpl implements EventsDatasource {
             return mappedEvents;
 
         } catch (error) {
+            console.log(error);
+
             if (error instanceof CustomError) {
                 throw error;
             }
@@ -46,20 +49,22 @@ export class EventsDatasourceImpl implements EventsDatasource {
         }
     }
 
-    async updateEvent(event: EventsEntity): Promise<EventsEntity> {
+    async updateEvent(event: Request): Promise<EventsEntity> {
+        const eventId = event.params.id;
         try {
             const existingEvent = await EventModel
-                .findById(event._id);
+                .findById(eventId);
             if (!existingEvent) throw CustomError.notFound('Event not found');
 
-            const updatingEvent = EventsMapper.EventEntityFromObjectUpdate(existingEvent, event);
+            if (existingEvent.user.toString() !== event.body.user.id) {
+                throw CustomError.unauthorized('You do not have permission to edit this event');
+            }
 
-            await EventModel.updateOne({ _id: event._id }, updatingEvent);
+            const updatedEvent = await EventModel.findByIdAndUpdate(eventId, event.body, { new: true });
 
-            const updatedEvent = await EventModel.findById(event._id);
-
-            return EventsMapper.EventEntityFromObject({ updatedEvent });
+            return EventsMapper.EventEntityFromObject(updatedEvent!);
         } catch (error) {
+
             if (error instanceof CustomError) {
                 throw error;
             }

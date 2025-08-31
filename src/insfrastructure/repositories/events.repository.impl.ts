@@ -1,4 +1,5 @@
 import { EventsRepository, EventsEntity, EventsDatasource } from "../../domain";
+import { Request } from "express";
 
 export class EventsRepositoryImpl implements EventsRepository {
     constructor(
@@ -13,7 +14,7 @@ export class EventsRepositoryImpl implements EventsRepository {
         return this.eventDatasource.createEvent(event);
     }
 
-    updateEvent(event: EventsEntity): Promise<EventsEntity> {
+    updateEvent(event: Request): Promise<EventsEntity> {
         return this.eventDatasource.updateEvent(event);
     }
 }

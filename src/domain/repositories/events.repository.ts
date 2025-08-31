@@ -1,4 +1,5 @@
 import { EventsEntity } from "..";
+import { Request } from "express";
 
 export abstract class EventsRepository {
 
@@ -6,6 +7,6 @@ export abstract class EventsRepository {
 
     abstract createEvent(event: EventsEntity): Promise<EventsEntity>;
 
-    abstract updateEvent(event: EventsEntity): Promise<EventsEntity>;
+    abstract updateEvent(event: Request): Promise<EventsEntity>;
 
 }

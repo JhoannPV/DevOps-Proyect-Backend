@@ -7,7 +7,6 @@ export class EventsMapper {
         let { user } = object;
         let { notes } = object;
 
-
         if (!_id || !id) {
             throw CustomError.badRequest('Missing id');
         }
@@ -32,26 +31,5 @@ export class EventsMapper {
             bgColor,
             user
         );
-    }
-
-    static EventEntityFromObjectUpdate(object: { [key: string]: any }, event: EventsEntity) {
-        let { id, _id, title, notes, start, end, bgColor, user } = object;
-
-        title = event.title;
-        notes = event.notes;
-        start = event.start;
-        end = event.end;
-        bgColor = event.bgColor;
-
-        return {
-            ...object,
-            _id: _id || id,
-            title,
-            notes,
-            start,
-            end,
-            bgColor,
-            user
-        }
     }
 }

@@ -31,7 +31,7 @@ export class EventsController {
     }
 
     updateEvent = (req: Request, res: Response) => {
-        new UpdateEvent(this.eventsRepository).updateEvent(req.body)
+        new UpdateEvent(this.eventsRepository).updateEvent(req)
             .then((event) => res.status(200).json({ event }))
             .catch((error) => this.handleError(error, res));
     }
