@@ -61,8 +61,9 @@ export class EventsDatasourceImpl implements EventsDatasource {
             }
 
             const updatedEvent = await EventModel.findByIdAndUpdate(eventId, event.body, { new: true });
+            if (!updatedEvent) throw CustomError.notFound('Event not found after update');
 
-            return EventsMapper.EventEntityFromObject(updatedEvent!);
+            return EventsMapper.EventEntityFromObject(updatedEvent);
         } catch (error) {
 
             if (error instanceof CustomError) {
