@@ -12,9 +12,6 @@ export class MongoDatabase {
         try {
             await mongoose.connect(mongoUrl, {
                 dbName: dbName,
-                ssl: true,
-                tls: true,
-                tlsAllowInvalidCertificates: false
             });
 
             console.log('Mongo connected');
