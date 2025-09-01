@@ -14,6 +14,7 @@ export class MongoDatabase {
                 dbName: dbName,
                 ssl: true,
                 tls: true,
+                tlsAllowInvalidCertificates: false
             });
 
             console.log('Mongo connected');
