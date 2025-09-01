@@ -12,4 +12,4 @@ __docker build -t devops-backend .__
 
 Luego, para crear y ejecutar un contenedor a partir de la imagen construida, utiliza el siguiente comando:
 
-__docker run -p 3000:3000 --env-file .env devops-backend__
+__docker run -p 3001:3001 --env-file .env devops-backend__

@@ -30,7 +30,7 @@ COPY --from=builder /app/dist ./dist
 COPY --from=builder /app/src/public ./src/public
 
 # Expone el puerto 3000
-EXPOSE 3000
+EXPOSE 3001
 
 # Comando para ejecutar la aplicación
 CMD ["npm", "start"]
