@@ -29,7 +29,7 @@ COPY --from=builder /app/dist ./dist
 # Copia la carpeta public para archivos estáticos
 COPY --from=builder /app/src/public ./src/public
 
-# Expone el puerto 3000
+# Expone el puerto 3001
 EXPOSE 3001
 
 # Comando para ejecutar la aplicación

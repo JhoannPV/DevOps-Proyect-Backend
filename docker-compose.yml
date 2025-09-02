@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
 
   mongo-db:
@@ -11,4 +9,23 @@ services:
     volumes:
       - ./mongo:/data/db
     ports:
-      - 27017:27017
+      - "27017:27017"
+    healthcheck:
+      test: ["CMD-SHELL", "mongosh --eval 'db.adminCommand(\"ping\")' -u $$MONGO_INITDB_ROOT_USERNAME -p $$MONGO_INITDB_ROOT_PASSWORD --authenticationDatabase admin || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  devops-backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: devops-backend
+    depends_on:
+      mongo-db:
+        condition: service_healthy
+    env_file:
+      - .env
+    ports:
+      - "3001:3001"
+    restart: unless-stopped
