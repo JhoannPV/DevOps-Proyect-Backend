@@ -34,8 +34,7 @@ export class AuthController {
     }
 
     renewUser = (req: Request, res: Response) => {
-        const renewTokenUserDto = req.body;
-        const userDto = new RenewToken(this.authRepository).execute(renewTokenUserDto!)
+        const userDto = new RenewToken(this.authRepository).execute(req)
             .then(data => res.status(201).json(data))
             .catch(error => this.handleError(error, res));
     }

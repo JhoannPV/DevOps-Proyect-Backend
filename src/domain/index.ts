@@ -2,7 +2,6 @@ export * from './datasources/auth.datasource';
 export * from './datasources/events.datasource';
 export * from './dtos/auth/register-user.dto';
 export * from './dtos/auth/login-user.dto';
-export * from './dtos/auth/renew-token-user.dto';
 export * from './entities/user.entity';
 export * from './entities/events.entity';
 export * from './errors/custom.error';

@@ -1,7 +1,8 @@
 import { UserMapper } from "..";
 import { BcryptAdapter } from "../../config";
 import { UserModel } from "../../data/mongodb";
-import { AuthDatasource, CustomError, LoginUserDto, RegisterUserDto, RenewTokenUserDto, UserEntity } from "../../domain";
+import { AuthDatasource, CustomError, LoginUserDto, RegisterUserDto, UserEntity } from "../../domain";
+import { Request } from "express";
 
 type HashFunction = (password: string) => string;
 type CompareFunction = (password: string, hashed: string) => boolean;
@@ -57,8 +58,8 @@ export class AuthDatasourceImpl implements AuthDatasource {
         }
     }
 
-    async renewToken(renewTokenUserDto: RenewTokenUserDto): Promise<UserEntity> {
-        const { id } = renewTokenUserDto;
+    async renewToken(req: Request): Promise<UserEntity> {
+        const { id } = req.body.user;
 
         try {
             const user = await UserModel.findById(id);
