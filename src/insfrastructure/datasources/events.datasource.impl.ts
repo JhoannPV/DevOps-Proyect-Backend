@@ -38,6 +38,8 @@ export class EventsDatasourceImpl implements EventsDatasource {
             });
 
             await newEvent.save();
+            // Asegura que el campo user esté poblado con el nombre para devolver {_id, name}
+            await newEvent.populate('user', 'name');
 
             return EventsMapper.EventEntityFromObject(newEvent);
 
@@ -63,6 +65,11 @@ export class EventsDatasourceImpl implements EventsDatasource {
             const updatedEvent = await EventModel.findByIdAndUpdate(eventId, event.body, { new: true });
             if (!updatedEvent) throw CustomError.notFound('Event not found after update');
 
+            await updatedEvent.populate('user', 'name');
+
+            console.log(updatedEvent);
+
+
             return EventsMapper.EventEntityFromObject(updatedEvent);
         } catch (error) {
 
@@ -81,14 +88,14 @@ export class EventsDatasourceImpl implements EventsDatasource {
 
             if (!existingEvent) throw CustomError.notFound('Event not found');
 
-            console.log(event.body);
-
             if (existingEvent.user.toString() !== event.body.user.id) {
                 throw CustomError.unauthorized('You do not have permission to delete this event');
             }
 
             const deletedEvent = await EventModel.findByIdAndDelete(eventId);
             if (!deletedEvent) throw CustomError.notFound('Event not found after delete');
+
+            await deletedEvent.populate('user', 'name');
 
             return EventsMapper.EventEntityFromObject(deletedEvent);
         } catch (error) {
