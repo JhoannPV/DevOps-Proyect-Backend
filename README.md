@@ -33,3 +33,74 @@ __npm start__
 # Construcción de la Imagen Docker y creación del Contenedor
 Para construir la imagen Docker del backend, la base de datos MongoDB y crear los contenedores, y que se ejecuten automáticamente, usa el siguiente comando:
 __docker compose up -d__
+
+## Pasar variables en tiempo de ejecución (recomendado)
+
+No recomendamos bakear secretos o credenciales en la imagen durante el build. En su lugar, pasa las variables necesarias cuando ejecutes el contenedor.
+
+Variables esperadas por la aplicación en tiempo de ejecución:
+
+- `PORT` (por defecto 3001 si no se pasa)
+- `JWT_SEED` (clave secreta para firmar JWT)
+- `MONGO_URL` (URL de conexión a MongoDB)
+- `MONGO_DB_NAME` (nombre de la base de datos)
+
+Ejemplos:
+
+1) `docker build y run` con variables individuales
+
+```bash
+docker build -t calendar-backend .
+```
+
+```bash
+docker run \
+	-e PORT=3001 \
+	-e JWT_SEED='tu_jwt_seed_secreto' \
+	-e MONGO_URL='mongodb://user:pass@host.docker.internal:27017/' \
+	-e MONGO_DB_NAME=calendardb \
+	-p 3001:3001 \
+	--name calendar-backend \
+	calendar-backend
+```
+Se puede generar la clave secreta con `openssl rand -hex 32` (Linux/Mac/Git Bash Windows)
+
+2) Usar un archivo `.env` y `--env-file` (útil en local, no comitear `.env`)
+
+```bash
+# .env (ejemplo, NO subir esto al repo)
+PORT=3001
+JWT_SEED=mi_seed_secreto
+MONGO_URL=mongodb://user:pass@mongo-host:27017/
+MONGO_DB_NAME=calendardb
+
+docker run --env-file .env -p 3001:3001 jhoannpv/devops-proyect-backend:latest
+```
+
+3) Con `docker-compose.yml` (recomendado en desarrollo para orquestación simple)
+
+```yaml
+version: '3.8'
+services:
+	backend:
+		image: jhoannpv/devops-proyect-backend:latest
+		ports:
+			- '3001:3001'
+		env_file:
+			- .env
+		restart: unless-stopped
+
+	# service para mongo ejemplo
+	mongo:
+		image: mongo:8
+		environment:
+			MONGO_INITDB_ROOT_USERNAME: user
+			MONGO_INITDB_ROOT_PASSWORD: pass
+		volumes:
+			- mongo-data:/data/db
+
+volumes:
+	mongo-data:
+```
+
+Seguridad: para producción usa mecanismos de secret management (Docker secrets, HashiCorp Vault, AWS Secrets Manager, K8s Secrets, etc.) en lugar de archivos de texto o build-args.

@@ -23,6 +23,18 @@ COPY package*.json ./
 # Instala solo dependencias de producción
 RUN npm ci --only=production
 
+# Build-time arguments (so the image can be configured at build)
+ARG PORT=3001
+ARG JWT_SEED
+ARG MONGO_URL
+ARG MONGO_DB_NAME
+
+# Set runtime environment variables from build args
+ENV PORT=${PORT}
+ENV JWT_SEED=${JWT_SEED}
+ENV MONGO_URL=${MONGO_URL}
+ENV MONGO_DB_NAME=${MONGO_DB_NAME}
+
 # Copia los archivos compilados
 COPY --from=builder /app/dist ./dist
 
