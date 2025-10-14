@@ -1,19 +1,51 @@
-# Starter pipeline
-# Start with a minimal pipeline that you can customize to build and deploy your code.
-# Add steps that build, run tests, deploy, and more:
-# https://aka.ms/yaml
+name: $(Date:yyyyMMdd)$(Rev:.r)
 
 trigger:
-- main
+  branches:
+    include:
+      - main
 
 pool:
-  vmImage: ubuntu-latest
+  name: agent2
 
-steps:
-- script: echo Hello, world!
-  displayName: 'Run a one-line script'
+variables:
+  dockerRegistryServiceConnection: dockerhub-connection
+  imageRepository: jalbertobohorquez/calendar-backend
+  imageTag: $(Build.BuildId)
+  k8sNamespace: calendar-app
+  deploymentName: calendar-backend
+  containerName: backend
 
-- script: |
-    echo Add other tasks to build, test, and deploy your project.
-    echo See https://aka.ms/yaml
-  displayName: 'Run a multi-line script'
+stages:
+  - stage: Build_Push
+    displayName: Build and Push Image
+    jobs:
+      - job: build_push
+        steps:
+          - checkout: self
+
+          - task: Docker@2
+            displayName: Build and Push to Docker Hub
+            inputs:
+              command: buildAndPush
+              containerRegistry: $(dockerRegistryServiceConnection)
+              repository: $(imageRepository)
+              dockerfile: $(Build.SourcesDirectory)/Dockerfile
+              buildContext: $(Build.SourcesDirectory)
+              tags: |
+                $(imageTag)
+                latest
+
+  - stage: Deploy
+    displayName: Update Kubernetes Deployment
+    dependsOn: Build_Push
+    jobs:
+      - job: deploy
+        steps:
+          - script: |
+              microk8s kubectl -n $(k8sNamespace) set image deployment/$(deploymentName) $(containerName)=docker.io/$(imageRepository):$(imageTag)
+            displayName: Set image on deployment
+          - script: |
+              microk8s kubectl -n $(k8sNamespace) rollout status deployment/$(deploymentName) --timeout=300s
+            displayName: Wait for rollout
+
