@@ -43,9 +43,7 @@ stages:
       - job: deploy
         steps:
           - script: |
-              microk8s kubectl -n $(k8sNamespace) set image deployment/$(deploymentName) $(containerName)=docker.io/$(imageRepository):$(imageTag)
-            displayName: Set image on deployment
-          - script: |
-              microk8s kubectl -n $(k8sNamespace) rollout status deployment/$(deploymentName) --timeout=300s
-            displayName: Wait for rollout
+              cd /home/sysadmin/Ansible
+              sudo ansible-playbook deployments/deploy_backend.yml
+            displayName: Apply backend via Ansible
 
